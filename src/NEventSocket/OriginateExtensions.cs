@@ -76,7 +76,15 @@ namespace NEventSocket
                 options.UUID = Guid.NewGuid().ToString();
             }
 
-            await socket.SubscribeEvents(EventName.ChannelAnswer, EventName.ChannelHangup, EventName.ChannelProgress).ConfigureAwait(false);
+            await socket.SubscribeEvents(
+                EventName.ChannelAnswer, 
+                EventName.ChannelHangup, 
+                EventName.ChannelProgress).ConfigureAwait(false);
+
+            var channelUUID = options.UUID;
+            await socket.Filter(HeaderNames.UniqueId, channelUUID).ConfigureAwait(false); //filter for our unique id (in case using full socket mode)
+            await socket.Filter(HeaderNames.OtherLegUniqueId, channelUUID).ConfigureAwait(false); //filter for channels bridging to our unique id
+            await socket.Filter(HeaderNames.ChannelCallUniqueId, channelUUID).ConfigureAwait(false); //filter for channels bridging to our unique id
 
             var originateString = string.Format("{0}{1} {2}", options, endpoint, destination);
 
@@ -87,7 +95,7 @@ namespace NEventSocket
                         .Merge(
                             socket.Events.FirstAsync(
                                 x =>
-                                    x.UUID == options.UUID
+                                    x.UUID == channelUUID
                                     && (x.EventName == EventName.ChannelAnswer || x.EventName == EventName.ChannelHangup
                                         || (options.ReturnRingReady && x.EventName == EventName.ChannelProgress))).Cast<BasicMessage>())
                         .FirstAsync(x => (x is BackgroundJobResult && !((BackgroundJobResult)x).Success) || x is EventMessage)
