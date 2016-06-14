@@ -4,6 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
+using NEventSocket.Channels;
+
 namespace NEventSocket.FreeSwitch
 {
     using System;
@@ -54,6 +57,14 @@ namespace NEventSocket.FreeSwitch
         /// </summary>
         public EventMessage ChannelData { get; protected set; }
 
+        /// <summary>
+        /// Creates a <see cref="Channel">Channel</see> for the originating call.
+        /// </summary>
+        public Task<Channel> CreateChannel(InboundSocket socket)
+        {
+            return Channel.Create(socket, ChannelData);
+        }
+        
         /// <summary>
         /// Creates an <see cref="OriginateResult"/> from either a BackgroundJobResult or an EventMessage
         /// </summary>
