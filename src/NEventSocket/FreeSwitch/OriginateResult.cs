@@ -6,6 +6,7 @@
 
 using System.Threading.Tasks;
 using NEventSocket.Channels;
+using NEventSocket.Sockets;
 
 namespace NEventSocket.FreeSwitch
 {
@@ -60,7 +61,7 @@ namespace NEventSocket.FreeSwitch
         /// <summary>
         /// Creates a <see cref="Channel">Channel</see> for the originating call.
         /// </summary>
-        public Task<Channel> CreateChannel(InboundSocket socket)
+        public Task<Channel> CreateChannel(EventSocket socket)
         {
             return Channel.Create(socket, ChannelData);
         }
