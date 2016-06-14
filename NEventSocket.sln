@@ -10,13 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		BREAKING CHANGES.md = BREAKING CHANGES.md
 		default.ps1 = default.ps1
 		src\NEventSocket\NEventSocket.nuspec = src\NEventSocket\NEventSocket.nuspec
-		Settings.StyleCop = Settings.StyleCop
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8A973BD1-83E8-4794-A81A-538CC7069BDC}"
-	ProjectSection(SolutionItems) = preProject
-		test\Settings.StyleCop = test\Settings.StyleCop
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEventSocket.Tests", "test\NEventSocket.Tests\NEventSocket.Tests.csproj", "{731A678B-6827-468A-BFA1-AB2533947D61}"
@@ -44,8 +38,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{731A678B-6827-468A-BFA1-AB2533947D61} = {8A973BD1-83E8-4794-A81A-538CC7069BDC}
 	EndGlobalSection
 EndGlobal

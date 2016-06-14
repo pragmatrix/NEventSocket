@@ -58,7 +58,7 @@ namespace NEventSocket
 
                 return result;
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             {
                 return new PlayResult(null);
             }
@@ -103,7 +103,7 @@ namespace NEventSocket
 
                 return result;
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             {
                 return new ReadResult(null, null);
             }
