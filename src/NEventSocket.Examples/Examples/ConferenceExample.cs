@@ -21,7 +21,7 @@ namespace NEventSocket.Examples.Examples
         {
             const string TempFolder = "C:/temp/";
             const string ConferenceId = "my-test-conference";
-            const string ConferencePin = "1234";
+            // const string ConferencePin = "1234";
             const string ConferenceArgs = ConferenceId;// +"+" + ConferencePin;
 
             listener = new OutboundListener(8084);
