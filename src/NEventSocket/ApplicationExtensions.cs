@@ -81,7 +81,7 @@ namespace NEventSocket
 
                 return result;
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             {
                 return new PlayGetDigitsResult(null, null);
             }
