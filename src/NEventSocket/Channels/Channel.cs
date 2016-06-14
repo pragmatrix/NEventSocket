@@ -36,16 +36,19 @@ namespace NEventSocket.Channels
             LingerTime = 10;
         }
 
-        internal static async Task<Channel> Create(OutboundSocket outboundSocket)
+        internal static Task<Channel> Create(OutboundSocket outboundSocket)
         {
-            var channel = new Channel(outboundSocket);
-            
-            channel.ExitOnHangup = true;
+            return Create(outboundSocket, outboundSocket.ChannelData);
+        }
 
-            await outboundSocket.Linger().ConfigureAwait(false);
+        internal static async Task<Channel> Create(EventSocket socket, EventMessage channelData)
+        {
+            var channel = new Channel(channelData, socket)
+            {
+                ExitOnHangup = true
+            };
 
-
-            await outboundSocket.SubscribeEvents(
+            await socket.SubscribeEvents(
                EventName.ChannelProgress,
                EventName.ChannelBridge,
                EventName.ChannelUnbridge,
@@ -53,9 +56,10 @@ namespace NEventSocket.Channels
                EventName.ChannelHangup,
                EventName.Dtmf).ConfigureAwait(false); //subscribe to minimum events
 
-            await outboundSocket.Filter(HeaderNames.UniqueId, outboundSocket.ChannelData.UUID).ConfigureAwait(false); //filter for our unique id (in case using full socket mode)
-            await outboundSocket.Filter(HeaderNames.OtherLegUniqueId, outboundSocket.ChannelData.UUID).ConfigureAwait(false); //filter for channels bridging to our unique id
-            await outboundSocket.Filter(HeaderNames.ChannelCallUniqueId, outboundSocket.ChannelData.UUID).ConfigureAwait(false); //filter for channels bridging to our unique id
+            var channelUUID = channelData.UUID;
+            await socket.Filter(HeaderNames.UniqueId, channelUUID).ConfigureAwait(false); //filter for our unique id (in case using full socket mode)
+            await socket.Filter(HeaderNames.OtherLegUniqueId, channelUUID).ConfigureAwait(false); //filter for channels bridging to our unique id
+            await socket.Filter(HeaderNames.ChannelCallUniqueId, channelUUID).ConfigureAwait(false); //filter for channels bridging to our unique id
 
             channel.InitializeSubscriptions();
             return channel;
