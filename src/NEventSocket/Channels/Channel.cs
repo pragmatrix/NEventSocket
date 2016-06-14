@@ -45,7 +45,7 @@ namespace NEventSocket.Channels
             return Create(outboundSocket, outboundSocket.ChannelData);
         }
 
-        internal static async Task<Channel> Create(EventSocket socket, EventMessage channelData)
+        public static async Task<Channel> Create(EventSocket socket, EventMessage channelData)
         {
             var channel = new Channel(channelData, socket)
             {
