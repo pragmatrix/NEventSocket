@@ -174,7 +174,7 @@ namespace NEventSocket.Channels
 
         public async Task StartPlayback(string file, Leg leg = Leg.ALeg)
         {
-            if (!IsAnswered || file == playbackPath)
+            if (!CanPlayback || file == playbackPath)
                 return;
 
             if (playbackPath != null)
@@ -193,7 +193,7 @@ namespace NEventSocket.Channels
 
         public async Task StopPlayback()
         {
-            if (!IsAnswered)
+            if (!CanPlayback)
                 return;
 
             // tbd: ensure playbackPath can never by empty! SendApi would probably fail. I guess
@@ -223,6 +223,8 @@ namespace NEventSocket.Channels
                     throw new ArgumentOutOfRangeException(nameof(leg), leg, null);
             }
         }
+
+        bool CanPlayback => IsAnswered || IsPreAnswered;
 
         public async Task StartRecording(string file, int? maxSeconds = null)
         {
