@@ -24,7 +24,7 @@ namespace NEventSocket.Channels
         private readonly InterlockedBoolean disposed = new InterlockedBoolean();
 
         private string recordingPath;
-        string playbackPath;
+        private string playbackPath;
 
         private Subject<BridgedChannel> bridgedChannels = new Subject<BridgedChannel>();
 
