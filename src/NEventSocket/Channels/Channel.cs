@@ -24,6 +24,7 @@ namespace NEventSocket.Channels
         private readonly InterlockedBoolean disposed = new InterlockedBoolean();
 
         private string recordingPath;
+        string playbackPath;
 
         private Subject<BridgedChannel> bridgedChannels = new Subject<BridgedChannel>();
 
@@ -165,9 +166,61 @@ namespace NEventSocket.Channels
             return eventSocket.ExecuteApplication(UUID, "sleep", milliseconds.ToString());
         }
 
-        public async Task StartRecording(string file, int? maxSeconds = null)
+        public async Task StartPlayback(string file, Leg leg = Leg.ALeg)
+        {
+            if (!IsAnswered || file == playbackPath)
+                return;
+
+            if (playbackPath != null)
+            {
+                Log.Warn(
+                    () =>
+                    "Channel {0} received a request to playback file {1} while currently playing back to file {2}. Channel will stop playback and start playing the new file."
+                        .Fmt(UUID, file, playbackPath));
+                await StopPlayback().ConfigureAwait(false);
+            }
+
+            await eventSocket.SendApi("uuid_broadcast {0} {1} {2}".Fmt(UUID, file, LegToString(leg))).ConfigureAwait(false);
+            Log.Debug(() => "Channel {0} is playing {1}".Fmt(UUID, file));
+            playbackPath = file;
+        }
+
+        public async Task StopPlayback()
         {
             if (!IsAnswered)
+                return;
+
+            // tbd: ensure playbackPath can never by empty! SendApi would probably fail. I guess
+            // ApiResponse should be processed.
+            if (string.IsNullOrEmpty(playbackPath))
+            {
+                Log.Warn(() => "Channel {0} is not playing".Fmt(UUID));
+                return;
+            }
+
+            await eventSocket.SendApi("uuid_break {0}".Fmt(UUID)).ConfigureAwait(false);
+            playbackPath = null;
+            Log.Debug(() => "Channel {0} has stopped playing {1}".Fmt(UUID, playbackPath));
+        }
+
+        static string LegToString(Leg leg)
+        {
+            switch (leg)
+            {
+                case Leg.ALeg:
+                    return "aleg";
+                case Leg.BLeg:
+                    return "bleg";
+                case Leg.Both:
+                    return "both";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(leg), leg, null);
+            }
+        }
+
+        public async Task StartRecording(string file, int? maxSeconds = null)
+        {
+            if (!IsAnswered || file == recordingPath)
             {
                 return;
             }
