@@ -84,5 +84,15 @@ namespace NEventSocket
                             },
                         StringBuilderPool.ReturnAndFree)));
         }
+
+        public static async Task<ApiResponse> Bridge(this EventSocket eventSocket, string uuid1, string uuid2)
+        {
+            return await eventSocket.SendApi("uuid_bridge {0} {1}".Fmt(uuid1, uuid2));
+        }
+
+        public static async Task<ApiResponse> Park(this EventSocket eventSocket, string uuid)
+        {
+            return await eventSocket.SendApi("uuid_park {0}".Fmt(uuid));
+        }
     }
 }
