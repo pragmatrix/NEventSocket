@@ -79,7 +79,9 @@ namespace NEventSocket.Channels
         {
             get
             {
-                return lastEvent.ChannelState;
+                // should always be populated, otherwise will throw invalidoperationexception
+                // which means we've introduced a b-u-g and are listening to non-channel events
+                return lastEvent.ChannelState.Value; 
             }
         }
 
@@ -272,7 +274,7 @@ namespace NEventSocket.Channels
         }
 
         /// Returns true if audio playback is currently possible, false otherwise.
-        bool CanPlayBackAudio => IsAnswered || IsPreAnswered;
+        bool CanPlayBackAudio => (IsAnswered || IsPreAnswered) && Socket?.IsConnected == true;
 
         public async Task<PlayGetDigitsResult> PlayGetDigits(PlayGetDigitsOptions options)
         {
@@ -489,7 +491,7 @@ namespace NEventSocket.Channels
                     }
                 }
 
-                Log.Debug(() => "BasicChannel Disposed.");
+                Log.Trace(() => "BasicChannel Disposed.");
             }
         }
 
@@ -500,7 +502,7 @@ namespace NEventSocket.Channels
         /// <param name="orPreAnswered">Function also run in pre answer state</param>
         protected Task RunIfAnswered(Func<Task> toRun, bool orPreAnswered = false)
         {
-            if (!IsAnswered && (!orPreAnswered || !IsPreAnswered))
+            if (disposed.Value || !eventSocket.IsConnected || !IsAnswered && (!orPreAnswered || !IsPreAnswered))
             {
                 return TaskHelper.Completed;
             }

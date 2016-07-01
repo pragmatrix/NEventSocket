@@ -39,9 +39,9 @@ task Compile {
 task RunTests -depends Compile {
   New-Item "$reportsDir\xUnit\$project\" -Type Directory -ErrorAction SilentlyContinue
 
-  if (!($is_appveyor_build)){
-    exec { .$xunit_path "$rootDir\test\NEventSocket.Tests\bin\Release\NEventSocket.Tests.dll" /html "$reportsDir\xUnit\$project\index.html"}
-  }
+  #if (!($is_appveyor_build)){
+    exec { & $xunit_path "$rootDir\test\NEventSocket.Tests\bin\Release\NEventSocket.Tests.dll" /html "$reportsDir\xUnit\$project\index.html"}
+  #}
 }
 
 task ILMerge -depends Compile {
@@ -66,7 +66,7 @@ task CreateNuGetPackages -depends ILMerge {
   
   $packageVersion
   gci $srcDir -Recurse -Include *.nuspec | % {
-    exec { .$rootDir\.nuget\nuget.exe pack $_ -o $buildOutputDir -version $packageVersion }
+    exec { nuget.exe pack $_ -o $buildOutputDir -version $packageVersion }
   }
 }
 
@@ -74,6 +74,6 @@ task PublishNugetPackages -depends CreateNuGetPackages {
   Get-ChildItem "$buildOutputDir\*.nupkg" | `
     ForEach-Object {
       Write-Host "Publishing $($_.FullName)"
-      exec { .$rootDir\.nuget\nuget.exe push $_.FullName }
+      exec { nuget.exe push $_.FullName }
     }
 }
