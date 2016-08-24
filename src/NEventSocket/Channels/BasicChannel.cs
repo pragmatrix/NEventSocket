@@ -72,8 +72,17 @@ namespace NEventSocket.Channels
                                        if (e.EventName == EventName.ChannelHangup)
                                        {
                                            Log.Info(() => "Channel [{0}] Hangup Detected [{1}]".Fmt(UUID, e.HangupCause));
+
+                                           try
+                                           {
+                                               HangupCallBack(e);
+                                           }
+                                           catch (Exception ex)
+                                           {
+                                               Log.ErrorException("Channel [{0}] error calling hangup callback".Fmt(UUID), ex);
+                                           }
+                                           
                                            Dispose();
-                                           HangupCallBack(e);
                                        }
                                    }));
         }
