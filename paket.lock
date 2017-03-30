@@ -1,0 +1,28 @@
+NUGET
+  remote: https://www.nuget.org/api/v2
+    Autofac (3.5) - framework: >= net452
+    ColoredConsole (0.4) - framework: >= net452
+    FluentAssertions (4.2.2) - framework: >= net45
+    LibLog (4.2.4) - framework: >= net45
+    Net.Autofac (0.1.11) - framework: >= net452
+      Autofac
+      Net.Core
+    Net.Core (0.1.11) - framework: >= net452
+    Rx-Core (2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+    Rx-Interfaces (2.2.5)
+    Rx-Linq (2.2.5)
+      Rx-Core (>= 2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+    Rx-Main (2.2.5)
+      Rx-Core (>= 2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+      Rx-Linq (>= 2.2.5)
+      Rx-PlatformServices (>= 2.2.5)
+    Rx-PlatformServices (2.2.5)
+      Rx-Core (>= 2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+    Serilog (1.5.14) - framework: >= net452
+    xunit (1.9.2) - framework: >= net40
+    xunit.extensions (1.9.2) - framework: >= net40
+      xunit (1.9.2)

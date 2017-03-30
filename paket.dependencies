@@ -1,0 +1,16 @@
+source https://www.nuget.org/api/v2/
+
+nuget Autofac 3.5.0 framework: >= net452
+nuget ColoredConsole 0.4.0 framework: >= net452
+nuget FluentAssertions 4.2.2 framework: >= net45
+nuget LibLog 4.2.4 framework: >= net45
+nuget Net.Autofac 0.1.11.0 framework: >= net452
+nuget Net.Core 0.1.11.0 framework: >= net452
+nuget Rx-Core 2.2.5
+nuget Rx-Interfaces 2.2.5
+nuget Rx-Linq 2.2.5
+nuget Rx-Main 2.2.5
+nuget Rx-PlatformServices 2.2.5
+nuget Serilog 1.5.14 framework: >= net452
+nuget xunit 1.9.2 framework: >= net40
+nuget xunit.extensions 1.9.2 framework: >= net40
